@@ -1,0 +1,22 @@
+clc
+clear
+%该函数作用为将text_in和256个密钥映射为想计算的S盒输入的中间值，比较简单的含义是计算异或值
+load("../mat/energy.mat")
+numRows = size(data,1);%这个参数表示选择多少个明文
+S_index = 2; %这个参数表示对第几个密钥进行DPA攻击，
+load('../mat/text_in.mat',"text");
+text_in = text(:,S_index);%这表示选取明文第几个字节
+key = zeros(1,256);
+for i = 1:256
+    key(i) = i - 1;
+end
+v = zeros(numRows,256);
+for i = 1:numRows
+    for j = 1:256
+        v(i,j) = bitxor(text_in(i),key(j));
+    end
+end
+disp(v);
+save("../mat/v.mat","v")
+
+
